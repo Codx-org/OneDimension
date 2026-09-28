@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "one-dimension",
+  "version": "${version}",
+  "name": "One Dimension",
+  "description": "Stacks every dimension into a single column and joins them at their edges, so the floor of one world is the sky of the next. Falling out of the bottom of the overworld drops you into whatever lies beneath it, without a loading screen and without losing your fall.",
+  "authors": [
+    "codx"
+  ],
+  "license": "CC0-1.0",
+  "icon": "assets/one-dimension/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "codx.OneDimension"
+    ],
+    "client": [
+      "codx.client.OneDimensionClient"
+    ]
+  },
+  "mixins": [
+    "one-dimension.mixins.json",
+    {
+      "config": "one-dimension.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*",
+    "planeshift": "*"
+  }
+}

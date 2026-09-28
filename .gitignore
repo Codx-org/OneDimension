@@ -1,0 +1,53 @@
+build/
+.gradle/
+run/
+runs/
+versions/*/build/
+versions/*/.gradle/
+versions/*/run/
+*.log
+.idea/
+.DS_Store
+
+# Scratch dir for javap output when verifying vanilla signatures per node.
+scratch-javap/
+
+# Modrinth publishing: the PAT, and the last upload payload the script writes.
+scripts/.mr_token
+scripts/.mr_data.json
+# CurseForge publishing: the upload token, the numeric project id, and the local ledger
+# (CF has no endpoint that lists a project's files, so the ledger is what makes re-runs safe).
+scripts/.cf_token
+scripts/.cf_project_id
+scripts/.cf_uploaded.json
+__pycache__/
+
+# Reference clone of upstream Citadel, kept beside the tree while vendoring its 98 classes
+# into src/main/java/.../citadel. It carries its own .git and is not part of this mod.
+Citadel/
+testmods/
+
+# ---------------------------------------------------------------------------
+# Working material, not the mod. None of this is needed to build or to satisfy
+# the LGPL source offer -- the build system itself (build-logic/, build*.gradle.kts,
+# settings.gradle.kts, gradle/, stonecutter.properties.toml) stays tracked.
+# ---------------------------------------------------------------------------
+
+# Local development notes and the log they pull in.
+
+# Deep notes, per-wave post-mortems and the live triage state.
+docs/
+
+# Player bug reports, their logs and the drafted replies.
+reports/
+screenshots/
+
+# Audit, probe, asset-generation and release-upload tooling.
+scripts/
+
+# Stonecutter's generated per-node trees (the build/ and run/ rules above only
+# covered part of it; nothing under here was ever tracked).
+versions/
+
+# One-off test plan.
+TESTPLAN-1.0.0.md

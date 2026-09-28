@@ -1,0 +1,17 @@
+pluginManagement {
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		mavenCentral()
+		gradlePluginPortal()
+	}
+}
+
+// Planeshift is built from the sibling directory rather than a published jar,
+// so a change there is picked up here without publishing anything.
+includeBuild '..'
+
+// Should match your modid
+rootProject.name = 'one-dimension'
