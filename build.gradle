@@ -22,6 +22,21 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
+
+	runs {
+		// A headless server that checks nothing stays under a looping world, and stops:
+		// ./gradlew runSelftest
+		selftest {
+			server()
+			name "Self test"
+			vmArg "-Done-dimension.selftest=true"
+			if (providers.environmentVariable("ONE_DIMENSION_SELFTEST_LOAD").isPresent()) {
+				vmArg "-Done-dimension.selftest.load=true"
+			}
+			programArg "--nogui"
+			runDir "run/selftest"
+		}
+	}
 }
 
 dependencies {
@@ -31,6 +46,10 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// The library that stacks the dimensions into one level. Substituted by the sibling
+	// build named in settings.gradle.
+	implementation "codx:customchunks:1.0.0"
 
 	// The portal-plane library this mod is a consumer of. Substituted by the sibling
 	// build named in settings.gradle.

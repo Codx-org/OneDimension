@@ -1,8 +1,16 @@
 package codx.onedimension;
 
+import java.util.List;
+import java.util.Set;
+
 import codx.OneDimension;
+import codx.customchunks.Band;
+import codx.customchunks.Stack;
+import codx.customchunks.Stacks;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
+
+import net.minecraft.core.SectionPos;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -40,6 +48,9 @@ public final class OpenFloors {
 	/** What bedrock becomes, or null to leave it exactly as it is. */
 	private static Block into = Blocks.OBSIDIAN;
 
+	/** The worlds whose bands keep theirs whatever that says, by dimension id. */
+	private static Set<String> kept = Set.of();
+
 	private OpenFloors() {
 	}
 
@@ -66,8 +77,25 @@ public final class OpenFloors {
 		into = found;
 	}
 
+	/**
+	 * Names the worlds whose bedrock is left alone.
+	 *
+	 * <p>The End, by default. Its bedrock is not a floor anybody has to get through — step
+	 * off the island and you are already falling out of the bottom of it — and it is the one
+	 * place where bedrock is scenery: the frame of the exit portal, and the feet of the
+	 * obsidian pillars. Turning that into obsidian gains nothing and costs the look of the
+	 * thing you fought a dragon for.
+	 */
+	public static void keptIn(List<String> dimensions) {
+		kept = Set.copyOf(dimensions);
+	}
+
 	private static void open(ServerLevel level, LevelChunk chunk, boolean generated) {
-		if (into == null) {
+		// Only the one dimension: a world that is not one keeps the floors it was made with,
+		// and so do the nether and the end outside it, which still exist on their own.
+		Stack stack = Stacks.of(level).orElse(null);
+
+		if (into == null || stack == null || !OneWorld.current().enabled()) {
 			return;
 		}
 
@@ -82,6 +110,12 @@ public final class OpenFloors {
 			// the answer is no for every section but the few at the top and bottom of a
 			// world. Asking first is what keeps this off the cost of loading a chunk.
 			if (section.hasOnlyAir() || !section.maybeHas(state -> state.is(Blocks.BEDROCK))) {
+				continue;
+			}
+
+			Band band = stack.bandAt(SectionPos.sectionToBlockCoord(chunk.getSectionYFromSectionIndex(index)));
+
+			if (band == null || kept.contains(band.source().identifier().toString())) {
 				continue;
 			}
 
